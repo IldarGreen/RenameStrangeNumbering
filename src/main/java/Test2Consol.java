@@ -40,11 +40,7 @@ public class Test2Consol {
 
 	// Метод фильтрации, отбор файлов с нумерацией
 	private static String fileNameFilter(File f) {
-		String fileName = f.getName();
-		Scanner scanner = null;
-		String fileNameNumber = null;
-
-		//fileNameNumber =  fileName.split("\\D+");
+		String fileName = f.getName();		
 
 		// Делим на две части, по не цифре (не по факту проверенная не цифра не "съедается")
 		String[] str_array = fileName.split("(?=\\D)", 2);
@@ -54,18 +50,11 @@ public class Test2Consol {
 
 		// Если в певрой части число, то редактируем вторую чать
 		if (string_1.matches("[0-9]+")) {
-			// Убиравем все что перед первым словом (не нумирацией)
-			string_2 = str_array[1].replaceFirst( "\\s+", "");
+			// Убиравем все что перед первым словом
+			string_2 = str_array[1].replaceFirst("\\W+", "");
 		}
 
-//		System.out.println(string_1);
-//		System.out.println(string_2);
-
-//		for (String word : str_array) {
-//			System.out.print(word + "|");
-//		}
-
-		String sum = string_1 + " ||| " + string_2;
+		String sum = string_1 + "^^^" + string_2;
 
 		return sum;
 	}

@@ -13,6 +13,7 @@ public class Test2Consol {
 
 		findFiles(dir);
 
+
 	}
 
 	// Метод поиска файлов
@@ -32,15 +33,21 @@ public class Test2Consol {
 
 				System.out.println(f.getName());
 
-				System.out.println(fileNameFilter(f));
+				String[] strings = fileNameSeporater(f);
+//				for (String string : strings) {
+//					System.out.println(string);
+//				}
+
+				renameFile(dir, f, strings);
 
 			}
 		}
 	}
 
-	// Метод фильтрации, отбор файлов с нумерацией
-	private static String fileNameFilter(File f) {
-		String fileName = f.getName();		
+	// Метод фильтрации, отбор файлов с нумерацией, и деление на номер и назвакие трека
+	private static String[] fileNameSeporater(File f) {
+		String fileName = f.getName();
+		String[] numberAndName = new String[2];
 
 		// Делим на две части, по не цифре (не по факту проверенная не цифра не "съедается")
 		String[] str_array = fileName.split("(?=\\D)", 2);
@@ -48,16 +55,44 @@ public class Test2Consol {
 		String string_1 = str_array[0].replaceAll("\\D", "");
 		String string_2 = str_array[1];
 
-		// Если в певрой части число, то редактируем вторую чать
+		//Если в певрой части число, то редактируем вторую чать
 		if (string_1.matches("[0-9]+")) {
 			// Убиравем все что перед первым словом
 			string_2 = str_array[1].replaceFirst("\\W+", "");
+			System.out.println("true");
 		}
 
-		String sum = string_1 + "^^^" + string_2;
+		//System.out.println(string_1.isEmpty());
 
-		return sum;
+//		if (!string_1.isEmpty()) {
+//			// Убиравем все что перед первым словом
+//			string_2 = str_array[1].replaceFirst("\\W+", "");
+//			System.out.println("tttttttttt");
+//		} else {
+//			string_2 = str_array[1];
+//		}
+
+
+		numberAndName[0] = string_1;
+		numberAndName[1] = string_2;
+
+		return numberAndName;
 	}
 
+	// Метод переиминовывания файла
+	private static void renameFile(String dir, File f, String[] strings) {
+		System.out.println(strings[0]);
+		System.out.println(strings[1]);
 
+		if (!strings[0].isEmpty()) {
+			File file = new File(dir + "\\" + f.getName());
+			File newFile = new File(dir + "\\" + strings[0] + " - " + strings[1]);
+
+			if (file.renameTo(newFile)) {
+				System.out.println("Файл переименован успешно");
+			} else {
+				System.out.println("Файл не был переименован");
+			}
+		}
+	}
 }

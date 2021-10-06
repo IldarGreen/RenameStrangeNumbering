@@ -5,15 +5,13 @@ import java.util.Scanner;
 public class Test2Consol {
 	public static void main(String[] args) {
 
-		String dir = new String("C:\\Users\\magiccat\\Desktop\\Slove - Le Danse 2011");
+		String dir = new String("C:\\Users\\magiccat\\Desktop\\Алина Орлова - Daybreak 2018");
 //		Scanner scanner = new Scanner(System.in);
 //		System.out.println("enter path to file");
 //		String dir = scanner.nextLine();
-		System.out.println(dir);
+//		System.out.println(dir);
 
 		findFiles(dir);
-
-
 	}
 
 	// Метод поиска файлов
@@ -34,12 +32,8 @@ public class Test2Consol {
 				System.out.println(f.getName());
 
 				String[] strings = fileNameSeporater(f);
-//				for (String string : strings) {
-//					System.out.println(string);
-//				}
 
 				renameFile(dir, f, strings);
-
 			}
 		}
 	}
@@ -49,32 +43,26 @@ public class Test2Consol {
 		String fileName = f.getName();
 		String[] numberAndName = new String[2];
 
-		// Делим на две части, по не цифре (не по факту проверенная не цифра не "съедается")
-		String[] str_array = fileName.split("(?=\\D)", 2);
-		// Убираем все не цифры
-		String string_1 = str_array[0].replaceAll("\\D", "");
-		String string_2 = str_array[1];
+		// Делим на две части, по не цифре (но по факту проверенная не цифра не "съедается")
+		String[] str_array1 = fileName.split("(?=\\D)", 2);
 
-		//Если в певрой части число, то редактируем вторую чать
-		if (string_1.matches("[0-9]+")) {
-			// Убиравем все что перед первым словом
-			string_2 = str_array[1].replaceFirst("\\W+", "");
-			System.out.println("true");
+		String string1_number = str_array1[0].replaceAll("\\D", "");//Убираем все что не цифра
+
+		//Если в певрой части было число, то редактируем название
+		if (string1_number.matches("[0-9]+")) {
+
+			String string2 = str_array1[1];
+
+			//  Делим по началу Названия
+			String[] str_array2 = string2.split("\\b", 2);
+
+			String string4_name = str_array2[1];
+
+			numberAndName[0] = string1_number;
+			numberAndName[1] = string4_name;
+		} else {
+			return str_array1;
 		}
-
-		//System.out.println(string_1.isEmpty());
-
-//		if (!string_1.isEmpty()) {
-//			// Убиравем все что перед первым словом
-//			string_2 = str_array[1].replaceFirst("\\W+", "");
-//			System.out.println("tttttttttt");
-//		} else {
-//			string_2 = str_array[1];
-//		}
-
-
-		numberAndName[0] = string_1;
-		numberAndName[1] = string_2;
 
 		return numberAndName;
 	}
@@ -84,6 +72,7 @@ public class Test2Consol {
 		System.out.println(strings[0]);
 		System.out.println(strings[1]);
 
+		// Если строка с номером пута, то значит его нет и файл не переименовываем
 		if (!strings[0].isEmpty()) {
 			File file = new File(dir + "\\" + f.getName());
 			File newFile = new File(dir + "\\" + strings[0] + " - " + strings[1]);

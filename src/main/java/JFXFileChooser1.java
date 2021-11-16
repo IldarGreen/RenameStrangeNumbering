@@ -1,13 +1,17 @@
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 public class JFXFileChooser1 extends Application {
 
@@ -22,20 +26,23 @@ public class JFXFileChooser1 extends Application {
 		FileChooser fileChooser = new FileChooser();
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 
-
-
 		Button button = new Button("Select File");
 		//создаем EventHandler
-		button.setOnAction(e -> {
-			File selectedFile = fileChooser.showOpenDialog(primaryStage);
-			System.out.println(selectedFile.getAbsolutePath());
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				File selectedFile = fileChooser.showOpenDialog(primaryStage);
+				showChoose(selectedFile);
+			}
 		});
+
+		button.getOnAction();
 
 		Button button2 = new Button("Select Directory");
 		//создаем EventHandler
 		button2.setOnAction(e -> {
 			File selectedDirectory = directoryChooser.showDialog(primaryStage);
-			System.out.println(selectedDirectory.getAbsolutePath());
+			showChoose(selectedDirectory);
 		});
 
 		VBox vBox = new VBox(button, button2);
@@ -45,5 +52,14 @@ public class JFXFileChooser1 extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
+	}
+
+	public void showChoose(File file) {
+		try {
+			System.out.println(file.getAbsolutePath());
+		} catch (NullPointerException e) {
+			//e.printStackTrace();
+			System.out.println("File or Directory not choose or exist");
+		}
 	}
 }

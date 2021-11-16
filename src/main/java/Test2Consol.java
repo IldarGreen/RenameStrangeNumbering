@@ -5,11 +5,11 @@ import java.util.Scanner;
 public class Test2Consol {
 	public static void main(String[] args) {
 
-		String dir = new String("C:\\Users\\magiccat\\Desktop\\Алина Орлова - Daybreak 2018");
-//		Scanner scanner = new Scanner(System.in);
-//		System.out.println("enter path to file");
-//		String dir = scanner.nextLine();
-//		System.out.println(dir);
+//		String dir = new String("C:\\Users\\magiccat\\Desktop\\Алина Орлова - Daybreak 2018");
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("enter path to file");
+		String dir = scanner.nextLine();
+		System.out.println(dir);
 
 		findFiles(dir);
 	}
@@ -17,6 +17,8 @@ public class Test2Consol {
 	// Метод поиска файлов
 	private static void findFiles(String dir) {
 		File file = new File(dir);
+
+		//System.out.println(file.getAbsolutePath());
 
 		if (!file.exists())
 			System.out.println(dir + " папка не существует");
@@ -27,19 +29,15 @@ public class Test2Consol {
 			System.out.println(dir + " не содержит файлов");
 		} else {
 			for (File f : listFiles) {
-				// Вызываем метод переиминовывания
-
-				System.out.println(f.getName());
-
-				String[] strings = fileNameSeporater(f);
-
-				renameFile(dir, f, strings);
+				renameFile(dir, f);
 			}
 		}
 	}
 
-	// Метод фильтрации, отбор файлов с нумерацией, и деление на номер и назвакие трека
-	private static String[] fileNameSeporater(File f) {
+
+	// Метод переиминовывания файла
+	private static void renameFile(String dir, File f) {
+
 		String fileName = f.getName();
 		String[] numberAndName = new String[2];
 
@@ -51,31 +49,22 @@ public class Test2Consol {
 		//Если в певрой части было число, то редактируем название
 		if (string1_number.matches("[0-9]+")) {
 
+			// Если одна цифра, то делаем двузначное число начиная с ноля ( 01 )
+			if (string1_number.length() <= 1) {
+				string1_number = "0" + string1_number;
+			}
+
 			String string2 = str_array1[1];
 
-			//  Делим по началу Названия
+			// Делим по началу Названия
 			String[] str_array2 = string2.split("\\b", 2);
 
 			String string4_name = str_array2[1];
 
-			numberAndName[0] = string1_number;
-			numberAndName[1] = string4_name;
-		} else {
-			return str_array1;
-		}
 
-		return numberAndName;
-	}
-
-	// Метод переиминовывания файла
-	private static void renameFile(String dir, File f, String[] strings) {
-		System.out.println(strings[0]);
-		System.out.println(strings[1]);
-
-		// Если строка с номером пута, то значит его нет и файл не переименовываем
-		if (!strings[0].isEmpty()) {
+			// Преименовываем файл
 			File file = new File(dir + "\\" + f.getName());
-			File newFile = new File(dir + "\\" + strings[0] + " - " + strings[1]);
+			File newFile = new File(dir + "\\" + string1_number + " - " + string4_name);
 
 			if (file.renameTo(newFile)) {
 				System.out.println("Файл переименован успешно");
@@ -83,5 +72,6 @@ public class Test2Consol {
 				System.out.println("Файл не был переименован");
 			}
 		}
+
 	}
 }

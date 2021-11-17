@@ -15,8 +15,11 @@ public class DaD2 extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		primaryStage.setTitle("Drag & Drop");
 		Group root = new Group();
-		Scene scene = new Scene(root, 551, 400);
+		Scene scene = new Scene(root, 500, 400);
+
+		//Change the icon of the dragged object
 		scene.setOnDragOver(new EventHandler<DragEvent>() {
 			@Override
 			public void handle(DragEvent event) {

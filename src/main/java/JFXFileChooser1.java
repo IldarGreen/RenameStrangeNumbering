@@ -5,16 +5,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 public class JFXFileChooser1 extends Application {
-
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -62,4 +59,6 @@ public class JFXFileChooser1 extends Application {
 			System.out.println("File or Directory not choose or exist");
 		}
 	}
+
+
 }

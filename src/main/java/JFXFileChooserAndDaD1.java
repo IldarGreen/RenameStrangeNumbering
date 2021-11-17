@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -26,21 +27,29 @@ public class JFXFileChooserAndDaD1 extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("FileChooserAndDaD");
+		primaryStage.setWidth(300);
+		primaryStage.setHeight(200);
+		primaryStage.setResizable(false);
+		Image icon =  new Image(getClass().getResourceAsStream("icon2.jpg"));
+		primaryStage.getIcons().add(icon);
 
 		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select files");
 		DirectoryChooser directoryChooser = new DirectoryChooser();
+		directoryChooser.setTitle("Select directory");
 
-		Button button1 = new Button("Select File");
+		Button button1 = new Button("Select Files");
 		button1.setMinSize(100, 25);
-		//создаем EventHandler
 		button1.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
-			public void handle(ActionEvent event) {
-				File selectedFile = fileChooser.showOpenDialog(primaryStage);
-				if (selectedFile != null) {
-					fileChooser.setInitialDirectory(selectedFile.getParentFile());
+			public void handle(final ActionEvent e) {
+				List<File> list = fileChooser.showOpenMultipleDialog(primaryStage);
+				if (list != null) {
+					for (File selectedFile : list) {
+						fileChooser.setInitialDirectory(selectedFile.getParentFile());
+						showChoose(selectedFile);
+					}
 				}
-				showChoose(selectedFile);
 			}
 		});
 
@@ -58,22 +67,8 @@ public class JFXFileChooserAndDaD1 extends Application {
 			}
 		});
 
-		Button button3 = new Button("Multiple File Choose");
-
-		button3.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(final ActionEvent e) {
-						List<File> list = fileChooser.showOpenMultipleDialog(primaryStage);
-						if (list != null) {
-							for (File selectedFile : list) {
-								showChoose(selectedFile);
-							}
-						}
-					}
-				});
-
 		Text text = new Text("\n Or Drop File to Upload");
-		VBox vBox = new VBox(4, button1, button2, button3, text);
+		VBox vBox = new VBox(4, button1, button2, text);
 		vBox.setAlignment(Pos.BASELINE_CENTER);
 
 		Scene scene = new Scene(vBox, 300, 200);
@@ -109,7 +104,6 @@ public class JFXFileChooserAndDaD1 extends Application {
 				event.consume();
 			}
 		});
-
 
 		primaryStage.setScene(scene);
 		primaryStage.show();

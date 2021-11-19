@@ -40,7 +40,7 @@ public class Test2Consol {
 	private static void renameFile(String dir, File f) {
 
 		String fileName = f.getName();
-		String[] numberAndName = new String[2];
+		//String[] numberAndName = new String[2];
 
 		// Делим на две части, по не цифре (но по факту проверенная не цифра не "съедается")
 		String[] str_array1 = fileName.split("(?=\\D)", 2);

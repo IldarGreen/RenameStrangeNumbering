@@ -6,7 +6,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -48,10 +47,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 				List<File> list = fileChooser.showOpenMultipleDialog(primaryStage);
 				if (list != null) {
 					fileChooser.setInitialDirectory(list.get(0).getParentFile());
-//					for (File selectedFile : list) {
-//						fileChooser.setInitialDirectory(selectedFile.getParentFile());
-//					}
-					FileRenamer.rename(list);
+					FileRenamer.takeFile(list);
 				}
 			}
 		});
@@ -65,7 +61,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 				File selectedDirectory = directoryChooser.showDialog(primaryStage);
 				if (selectedDirectory != null) {
 					directoryChooser.setInitialDirectory(selectedDirectory.getParentFile());
-					FileRenamer.rename(selectedDirectory);
+					FileRenamer.takeFile(selectedDirectory);
 				}
 			}
 		});
@@ -100,7 +96,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 					String filePath = null;
 					for (File file : db.getFiles()) {
 						//filePath = file.getAbsolutePath();
-						FileRenamer.rename(file);
+						FileRenamer.takeFile(file);
 					}
 				}
 				event.setDropCompleted(success);

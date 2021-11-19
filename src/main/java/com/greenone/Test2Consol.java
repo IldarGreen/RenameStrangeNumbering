@@ -1,5 +1,6 @@
+package com.greenone;
+
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Test2Consol {

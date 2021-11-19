@@ -1,7 +1,8 @@
+package com.greenone;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,7 +15,6 @@ import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 
 import java.io.File;
 import java.util.List;
@@ -30,40 +30,43 @@ public class JFXFileChooserAndDaD1 extends Application {
 		primaryStage.setWidth(300);
 		primaryStage.setHeight(200);
 		primaryStage.setResizable(false);
-		Image icon =  new Image(getClass().getResourceAsStream("icon2.jpg"));
-		primaryStage.getIcons().add(icon);
+//		Image icon =  new Image(getClass().getResourceAsStream("icon2.jpg"));
+//		primaryStage.getIcons().add(icon);
 
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select files");
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		directoryChooser.setTitle("Select directory");
 
+
 		Button button1 = new Button("Select Files");
 		button1.setMinSize(100, 25);
+		//create EventHandler
 		button1.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(final ActionEvent e) {
 				List<File> list = fileChooser.showOpenMultipleDialog(primaryStage);
 				if (list != null) {
-					for (File selectedFile : list) {
-						fileChooser.setInitialDirectory(selectedFile.getParentFile());
-						showChoose(selectedFile);
-					}
+					fileChooser.setInitialDirectory(list.get(0).getParentFile());
+//					for (File selectedFile : list) {
+//						fileChooser.setInitialDirectory(selectedFile.getParentFile());
+//					}
+					FileRenamer.rename(list);
 				}
 			}
 		});
 
 		Button button2 = new Button("Select Directory");
 		button2.setMinSize(100, 25);
-		//создаем EventHandler
+		//create EventHandler
 		button2.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				File selectedDirectory = directoryChooser.showDialog(primaryStage);
 				if (selectedDirectory != null) {
 					directoryChooser.setInitialDirectory(selectedDirectory.getParentFile());
+					FileRenamer.rename(selectedDirectory);
 				}
-				showChoose(selectedDirectory);
 			}
 		});
 
@@ -96,8 +99,8 @@ public class JFXFileChooserAndDaD1 extends Application {
 					success = true;
 					String filePath = null;
 					for (File file : db.getFiles()) {
-						filePath = file.getAbsolutePath();
-						showChoose(file);
+						//filePath = file.getAbsolutePath();
+						FileRenamer.rename(file);
 					}
 				}
 				event.setDropCompleted(success);
@@ -107,14 +110,5 @@ public class JFXFileChooserAndDaD1 extends Application {
 
 		primaryStage.setScene(scene);
 		primaryStage.show();
-	}
-
-	public void showChoose(File file) {
-		try {
-			System.out.println(file.getAbsolutePath());
-		} catch (NullPointerException e) {
-			//e.printStackTrace();
-			System.out.println("File or Directory not choose or exist");
-		}
 	}
 }

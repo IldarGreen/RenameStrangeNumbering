@@ -16,6 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JFXFileChooserAndDaD1 extends Application {
@@ -32,6 +33,8 @@ public class JFXFileChooserAndDaD1 extends Application {
 //		Image icon =  new Image(getClass().getResourceAsStream("icon2.jpg"));
 //		primaryStage.getIcons().add(icon);
 
+		List<File> listToSubmit = new ArrayList<>();
+
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Select files");
 		DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -45,9 +48,11 @@ public class JFXFileChooserAndDaD1 extends Application {
 			@Override
 			public void handle(final ActionEvent e) {
 				List<File> list = fileChooser.showOpenMultipleDialog(primaryStage);
+
 				if (list != null) {
 					fileChooser.setInitialDirectory(list.get(0).getParentFile());
-					FileRenamer.takeFile(list);
+					listToSubmit.clear();
+					listToSubmit.addAll(list);
 				}
 			}
 		});
@@ -59,15 +64,30 @@ public class JFXFileChooserAndDaD1 extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				File selectedDirectory = directoryChooser.showDialog(primaryStage);
+
 				if (selectedDirectory != null) {
 					directoryChooser.setInitialDirectory(selectedDirectory.getParentFile());
-					FileRenamer.takeFile(selectedDirectory);
+					listToSubmit.clear();
+					listToSubmit.add(selectedDirectory);
+				}
+			}
+		});
+
+		Button buttonSubmit = new Button("Submit");
+		buttonSubmit.setMinSize(100, 25);
+		buttonSubmit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (!listToSubmit.isEmpty()) {
+					System.out.println("Рaботаем дальше");
+					FileRename.takeListOfFile(listToSubmit);
+					listToSubmit.clear();
 				}
 			}
 		});
 
 		Text text = new Text("\n Or Drop File to Upload");
-		VBox vBox = new VBox(4, button1, button2, text);
+		VBox vBox = new VBox(4, button1, button2, buttonSubmit, text);
 		vBox.setAlignment(Pos.BASELINE_CENTER);
 
 		Scene scene = new Scene(vBox, 300, 200);
@@ -89,15 +109,15 @@ public class JFXFileChooserAndDaD1 extends Application {
 		scene.setOnDragDropped(new EventHandler<DragEvent>() {
 			@Override
 			public void handle(DragEvent event) {
-				Dragboard db = event.getDragboard();
+				Dragboard dragBoard = event.getDragboard();
 				boolean success = false;
-				if (db.hasFiles()) {
+				if (dragBoard.hasFiles()) {
 					success = true;
-					String filePath = null;
-					for (File file : db.getFiles()) {
-						//filePath = file.getAbsolutePath();
-						FileRenamer.takeFile(file);
-					}
+//					List<File> listDB = dragBoard.getFiles();
+
+					listToSubmit.addAll(dragBoard.getFiles());
+					FileRename.takeListOfFile(listToSubmit);
+					listToSubmit.clear();
 				}
 				event.setDropCompleted(success);
 				event.consume();

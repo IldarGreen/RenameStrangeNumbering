@@ -3,26 +3,22 @@ package com.greenone;
 import java.io.File;
 import java.util.List;
 
-public class FileRenamer {
+public class FileRename {
 
-	public static void takeFile(List<File> list) {
-
+	public static void takeListOfFile(List<File> list) {
 		for (File file : list) {
-			try {
-				renameFile(file);
-			} catch (NullPointerException e) {
-				//e.printStackTrace();
-				System.out.println("File or Directory not choose or exist");
+			if (file.isDirectory()) {
+				//работаем с папкой
+				System.out.println("Здесь должна быть обратботка папок");
+				file.listFiles();
+			} else {
+				try {
+					renameFile(file);
+				} catch (NullPointerException e) {
+					//e.printStackTrace();
+					System.out.println("File or Directory not choose or exist");
+				}
 			}
-		}
-	}
-
-	public static void takeFile(File file) {
-		try {
-			renameFile(file);
-		} catch (NullPointerException e) {
-			//e.printStackTrace();
-			System.out.println("File or Directory not choose or exist");
 		}
 	}
 
@@ -31,9 +27,9 @@ public class FileRenamer {
 		String pathToFile = file.getAbsolutePath();
 		String pathToFolder =  file.getParent();
 
-//		System.out.println(fileName);
-//		System.out.println(pathToFile);
-//		System.out.println(pathToFolder);
+		System.out.println(fileName);
+		System.out.println(pathToFile);
+		System.out.println(pathToFolder);
 
 		// Делим на две части, по не цифре (но по факту проверенная не цифра не "съедается")
 		String[] str_array1 = fileName.split("(?=\\D)", 2);

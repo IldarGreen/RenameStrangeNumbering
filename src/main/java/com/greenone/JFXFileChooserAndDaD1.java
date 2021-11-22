@@ -6,6 +6,8 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -41,6 +43,22 @@ public class JFXFileChooserAndDaD1 extends Application {
 		directoryChooser.setTitle("Select directory");
 
 
+		Button buttonSubmit = new Button("Submit");
+		buttonSubmit.setMinSize(100, 25);
+		buttonSubmit.setDisable(true);
+
+		buttonSubmit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				buttonSubmit.setDisable(true);
+
+				System.out.println("Прошел сабмит" + listToSubmit);
+
+				FileRename.takeListOfFile(listToSubmit);
+				listToSubmit.clear();
+			}
+		});
+
 		Button button1 = new Button("Select Files");
 		button1.setMinSize(100, 25);
 		//create EventHandler
@@ -53,6 +71,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 					fileChooser.setInitialDirectory(list.get(0).getParentFile());
 					listToSubmit.clear();
 					listToSubmit.addAll(list);
+					buttonSubmit.setDisable(false);
 				}
 			}
 		});
@@ -69,19 +88,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 					directoryChooser.setInitialDirectory(selectedDirectory.getParentFile());
 					listToSubmit.clear();
 					listToSubmit.add(selectedDirectory);
-				}
-			}
-		});
-
-		Button buttonSubmit = new Button("Submit");
-		buttonSubmit.setMinSize(100, 25);
-		buttonSubmit.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				if (!listToSubmit.isEmpty()) {
-					System.out.println("Рaботаем дальше");
-					FileRename.takeListOfFile(listToSubmit);
-					listToSubmit.clear();
+					buttonSubmit.setDisable(false);
 				}
 			}
 		});
@@ -114,6 +121,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 				if (dragBoard.hasFiles()) {
 					success = true;
 					listToSubmit.addAll(dragBoard.getFiles());
+					buttonSubmit.setDisable(false);
 				}
 				event.setDropCompleted(success);
 				event.consume();

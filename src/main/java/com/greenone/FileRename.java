@@ -1,6 +1,7 @@
 package com.greenone;
 
 import java.io.File;
+import java.security.cert.Extension;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,11 +13,11 @@ public class FileRename {
 				//работаем с папкой
 				takeListOfFile(Arrays.asList(file.listFiles()));
 			} else {
+				//работаем с файлами
 				try {
 					renameFile(file);
 				} catch (NullPointerException e) {
-					//e.printStackTrace();
-					System.out.println("File or Directory not choose or exist");
+					System.out.println("File not exist");
 				}
 			}
 		}
@@ -26,10 +27,6 @@ public class FileRename {
 		String fileName = file.getName();
 		String pathToFile = file.getAbsolutePath();
 		String pathToFolder = file.getParent();
-
-		System.out.println(fileName);
-		System.out.println(pathToFile);
-		System.out.println(pathToFolder);
 
 		// Делим на две части, по не цифре (но по факту проверенная не цифра не "съедается")
 		String[] str_array1 = fileName.split("(?=\\D)", 2);
@@ -53,10 +50,14 @@ public class FileRename {
 			File oldFile = new File(pathToFile);
 			File newFile = new File(pathToFolder + "\\" + string1_number + " - " + string4_name);
 
-			if (oldFile.renameTo(newFile)) {
-				System.out.println("Файл переименован успешно");
+			if (!oldFile.getAbsoluteFile().equals(newFile.getAbsolutePath())) {
+				if (oldFile.renameTo(newFile)) {
+					System.out.println("Файл переименован успешно");
+				} else {
+					System.out.println("Файл не был переименован");
+				}
 			} else {
-				System.out.println("Файл не был переименован");
+				System.out.println("Файл не нуждается в переименовывании");
 			}
 		}
 	}

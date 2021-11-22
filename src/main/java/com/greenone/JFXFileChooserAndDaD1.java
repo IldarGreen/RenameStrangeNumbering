@@ -113,11 +113,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 				boolean success = false;
 				if (dragBoard.hasFiles()) {
 					success = true;
-//					List<File> listDB = dragBoard.getFiles();
-
 					listToSubmit.addAll(dragBoard.getFiles());
-					FileRename.takeListOfFile(listToSubmit);
-					listToSubmit.clear();
 				}
 				event.setDropCompleted(success);
 				event.consume();

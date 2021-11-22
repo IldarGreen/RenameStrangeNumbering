@@ -1,6 +1,7 @@
 package com.greenone;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileRename {
@@ -9,8 +10,7 @@ public class FileRename {
 		for (File file : list) {
 			if (file.isDirectory()) {
 				//работаем с папкой
-				System.out.println("Здесь должна быть обратботка папок");
-				file.listFiles();
+				takeListOfFile(Arrays.asList(file.listFiles()));
 			} else {
 				try {
 					renameFile(file);
@@ -25,7 +25,7 @@ public class FileRename {
 	private static void renameFile(File file) {
 		String fileName = file.getName();
 		String pathToFile = file.getAbsolutePath();
-		String pathToFolder =  file.getParent();
+		String pathToFolder = file.getParent();
 
 		System.out.println(fileName);
 		System.out.println(pathToFile);
@@ -53,14 +53,11 @@ public class FileRename {
 			File oldFile = new File(pathToFile);
 			File newFile = new File(pathToFolder + "\\" + string1_number + " - " + string4_name);
 
-
 			if (oldFile.renameTo(newFile)) {
 				System.out.println("Файл переименован успешно");
 			} else {
 				System.out.println("Файл не был переименован");
 			}
 		}
-
-
 	}
 }

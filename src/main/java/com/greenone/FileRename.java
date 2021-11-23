@@ -16,7 +16,8 @@ public class FileRename {
 				try {
 					renameFile(file);
 				} catch (NullPointerException e) {
-					System.out.println("File not exist");
+					AllAlert.showWarningAlert();
+//					System.out.println("File not exist!");
 				}
 			}
 		}
@@ -31,8 +32,6 @@ public class FileRename {
 		String[] stringFullName = fileName.split("(?=\\D)", 2);
 		String stringNumber = stringFullName[0];
 		String stringName = stringFullName[1];
-
-		System.out.println("Проверка 1 " + fileName + " || " + stringNumber + " || " + stringName);
 
 		stringNumber = stringFullName[0].replaceAll("\\D", "");//Убираем все что не цифра
 		//Если первая часть состоит из цифр, то редактируем название
@@ -50,21 +49,19 @@ public class FileRename {
 			File oldFile = new File(pathToFile);
 			File newFile = new File(pathToFolder + "\\" + stringNumber + " - " + stringJustName);
 
-			System.out.println("Проверка 2 " + stringNumber);
-
-			System.out.println(oldFile.getAbsolutePath());
-			System.out.println(newFile.getAbsolutePath());
-
 			if (!oldFile.getAbsolutePath().equals(newFile.getAbsolutePath())) {
 				if (oldFile.renameTo(newFile)) {
-					System.out.println("Файл переименован успешно");
+					AllAlert.showInfoAlertSuccess();
+//					System.out.println("Файл переименован успешно");
 				}
 			} else {
-				System.out.println("Файл не нуждается в переименовывании 2");
+				AllAlert.showInfoAlertNone();
+//				System.out.println("Файл не нуждается в переименовывании 2");
 			}
 
 		} else {
-			System.out.println("Файл не нуждается в переименовывании 1");
+			AllAlert.showInfoAlertNone();
+//			System.out.println("Файл не нуждается в переименовывании 1");
 		}
 	}
 }

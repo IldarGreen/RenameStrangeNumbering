@@ -31,7 +31,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 		primaryStage.setWidth(300);
 		primaryStage.setHeight(200);
 		primaryStage.setResizable(false);
-		Image icon =  new Image("icon2.png");
+		Image icon = new Image("icon2.png");
 		primaryStage.getIcons().add(icon);
 
 		List<File> listToSubmit = new ArrayList<>();
@@ -41,7 +41,6 @@ public class JFXFileChooserAndDaD1 extends Application {
 		DirectoryChooser directoryChooser = new DirectoryChooser();
 		directoryChooser.setTitle("Select directory");
 
-
 		Button buttonSubmit = new Button("Submit");
 		buttonSubmit.setMinSize(100, 25);
 		buttonSubmit.setDisable(true);
@@ -50,9 +49,6 @@ public class JFXFileChooserAndDaD1 extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				buttonSubmit.setDisable(true);
-
-//				System.out.println("Прошел сабмит" + listToSubmit);
-
 				FileRename.takeListOfFile(listToSubmit);
 				listToSubmit.clear();
 			}

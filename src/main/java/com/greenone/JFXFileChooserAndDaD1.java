@@ -6,8 +6,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -32,8 +31,8 @@ public class JFXFileChooserAndDaD1 extends Application {
 		primaryStage.setWidth(300);
 		primaryStage.setHeight(200);
 		primaryStage.setResizable(false);
-//		Image icon =  new Image(getClass().getResourceAsStream("icon2.jpg"));
-//		primaryStage.getIcons().add(icon);
+		Image icon =  new Image("icon2.png");
+		primaryStage.getIcons().add(icon);
 
 		List<File> listToSubmit = new ArrayList<>();
 
@@ -52,7 +51,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 			public void handle(ActionEvent event) {
 				buttonSubmit.setDisable(true);
 
-				System.out.println("Прошел сабмит" + listToSubmit);
+//				System.out.println("Прошел сабмит" + listToSubmit);
 
 				FileRename.takeListOfFile(listToSubmit);
 				listToSubmit.clear();

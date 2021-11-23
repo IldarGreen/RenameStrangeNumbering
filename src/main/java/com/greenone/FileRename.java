@@ -1,7 +1,6 @@
 package com.greenone;
 
 import java.io.File;
-import java.security.cert.Extension;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,36 +28,43 @@ public class FileRename {
 		String pathToFolder = file.getParent();
 
 		// Делим на две части, по не цифре (но по факту проверенная не цифра не "съедается")
-		String[] str_array1 = fileName.split("(?=\\D)", 2);
+		String[] stringFullName = fileName.split("(?=\\D)", 2);
+		String stringNumber = stringFullName[0];
+		String stringName = stringFullName[1];
 
-		String string1_number = str_array1[0].replaceAll("\\D", "");//Убираем все что не цифра
+		System.out.println("Проверка 1 " + fileName + " || " + stringNumber + " || " + stringName);
 
-		//Если в певрой части было число, то редактируем название
-		if (string1_number.matches("[0-9]+")) {
-
-			// Если одна цифра, то делаем двузначное число начиная с ноля ( 01 )
-			if (string1_number.length() <= 1) {
-				string1_number = "0" + string1_number;
+		stringNumber = stringFullName[0].replaceAll("\\D", "");//Убираем все что не цифра
+		//Если первая часть состоит из цифр, то редактируем название
+		if (stringNumber.matches("[0-9]+")) {
+			// Если одна цифра, то меняем на двузначное число начиная с ноля ( 01 )
+			if (stringNumber.length() <= 1) {
+				stringNumber = "0" + stringNumber;
 			}
 
-			String string2 = str_array1[1];
 			// Делим по началу Названия
-			String[] str_array2 = string2.split("\\b", 2);
-			String string4_name = str_array2[1];
+			String[] stringNameSplit = stringName.split("\\b", 2);
+			String stringJustName = stringNameSplit[1];
 
 			// Преименовываем файл
 			File oldFile = new File(pathToFile);
-			File newFile = new File(pathToFolder + "\\" + string1_number + " - " + string4_name);
+			File newFile = new File(pathToFolder + "\\" + stringNumber + " - " + stringJustName);
 
-			if (!oldFile.getAbsoluteFile().equals(newFile.getAbsolutePath())) {
+			System.out.println("Проверка 2 " + stringNumber);
+
+			System.out.println(oldFile.getAbsolutePath());
+			System.out.println(newFile.getAbsolutePath());
+
+			if (!oldFile.getAbsolutePath().equals(newFile.getAbsolutePath())) {
 				if (oldFile.renameTo(newFile)) {
 					System.out.println("Файл переименован успешно");
-				} else {
-					System.out.println("Файл не был переименован");
 				}
 			} else {
-				System.out.println("Файл не нуждается в переименовывании");
+				System.out.println("Файл не нуждается в переименовывании 2");
 			}
+
+		} else {
+			System.out.println("Файл не нуждается в переименовывании 1");
 		}
 	}
 }

@@ -9,44 +9,27 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FileRename {
-	static int numberOfSuccess;
-	static int numberOfNone;
-	static int numberOfWarning;
-
-
-
 	public static void takeListOfFile(List<File> list) {
-
-		takeAllInRecursion(list);
-
-		System.out.println("После рекурсии");
-
-		AllAlert.AccumulatorOfMessage(numberOfSuccess, numberOfNone, numberOfWarning);
-
-		System.out.println("После вызова Alert'а");
-
-		numberOfSuccess = 0;
-		numberOfNone = 0;
-		numberOfWarning = 0;
+		AccDTO accDTO = new AccDTO();
+		takeAllInRecursion(list, accDTO);
+		AllAlert.AccumulatorOfMessage(accDTO);
 	}
 
-	private static void takeAllInRecursion (List<File> list) {
-		System.out.println("method is called");
+	private static void takeAllInRecursion(List<File> list, AccDTO accDTO) {
 		for (File file : list) {
 			if (file.isDirectory()) {
 				System.out.println("folder");
 				//работаем с папкой
-				takeAllInRecursion(Arrays.asList(file.listFiles()));
+				takeAllInRecursion(Arrays.asList(file.listFiles()), accDTO);
 			} else {
 				System.out.println("file");
 				//работаем с файлами
-				renameFile(file);
+				renameFile(file, accDTO);
 			}
 		}
 	}
 
-	private static void renameFile(File file) {
-
+	private static void renameFile(File file, AccDTO accDTO) {
 		String fileName = file.getName();
 		Path source = Paths.get(file.getAbsolutePath());
 
@@ -56,13 +39,13 @@ public class FileRename {
 		String stringName = stringFullName[1];
 
 		stringNumber = stringFullName[0].replaceAll("\\D", "");//Убираем все что не цифра
+
 		//Если первая часть состоит из цифр, то редактируем название
 		if (stringNumber.matches("[0-9]+")) {
 			// Если одна цифра, то меняем на двузначное число начиная с ноля ( 01 )
 			if (stringNumber.length() <= 1) {
 				stringNumber = "0" + stringNumber;
 			}
-
 			// Делим по началу Названия
 			String[] stringNameSplit = stringName.split("\\b", 2);
 			String stringJustName = stringNameSplit[1];
@@ -74,21 +57,21 @@ public class FileRename {
 				try {
 					// rename a file in the same directory
 					Files.move(source, source.resolveSibling(newFileName));
-//					AllAlert.showInfoAlertSuccess();
-					numberOfSuccess++;
+//					numberOfSuccess++;
+					accDTO.setNumberOfSuccess(accDTO.getNumberOfSuccess() + 1);
 				} catch (IOException e) {
 					e.printStackTrace();
-//					AllAlert.showWarningAlert();
-					numberOfWarning++;
+//					numberOfWarning++;
+					accDTO.setNumberOfWarning(accDTO.getNumberOfWarning() + 1);
 				}
 			} else {
-//				AllAlert.showInfoAlertNone();
-				numberOfNone++;
+//				numberOfNone++;
+				accDTO.setNumberOfNone(accDTO.getNumberOfNone() + 1);
 			}
 
 		} else {
-//			AllAlert.showInfoAlertNone();
-			numberOfWarning++;
+//			numberOfWarning++;
+			accDTO.setNumberOfWarning(accDTO.getNumberOfWarning() + 1);
 		}
 	}
 }

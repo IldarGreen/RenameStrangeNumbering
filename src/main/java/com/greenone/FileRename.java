@@ -1,32 +1,54 @@
 package com.greenone;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
 public class FileRename {
+	static int numberOfSuccess;
+	static int numberOfNone;
+	static int numberOfWarning;
+
+
 
 	public static void takeListOfFile(List<File> list) {
+
+		takeAllInRecursion(list);
+
+		System.out.println("После рекурсии");
+
+		AllAlert.AccumulatorOfMessage(numberOfSuccess, numberOfNone, numberOfWarning);
+
+		System.out.println("После вызова Alert'а");
+
+		numberOfSuccess = 0;
+		numberOfNone = 0;
+		numberOfWarning = 0;
+	}
+
+	private static void takeAllInRecursion (List<File> list) {
+		System.out.println("method is called");
 		for (File file : list) {
 			if (file.isDirectory()) {
+				System.out.println("folder");
 				//работаем с папкой
-				takeListOfFile(Arrays.asList(file.listFiles()));
+				takeAllInRecursion(Arrays.asList(file.listFiles()));
 			} else {
+				System.out.println("file");
 				//работаем с файлами
-				try {
-					renameFile(file);
-				} catch (NullPointerException e) {
-					AllAlert.showWarningAlert();
-//					System.out.println("File not exist!");
-				}
+				renameFile(file);
 			}
 		}
 	}
 
 	private static void renameFile(File file) {
+
 		String fileName = file.getName();
-		String pathToFile = file.getAbsolutePath();
-		String pathToFolder = file.getParent();
+		Path source = Paths.get(file.getAbsolutePath());
 
 		// Делим на две части, по не цифре (но по факту проверенная не цифра не "съедается")
 		String[] stringFullName = fileName.split("(?=\\D)", 2);
@@ -45,23 +67,28 @@ public class FileRename {
 			String[] stringNameSplit = stringName.split("\\b", 2);
 			String stringJustName = stringNameSplit[1];
 
-			// Преименовываем файл
-			File oldFile = new File(pathToFile);
-			File newFile = new File(pathToFolder + "\\" + stringNumber + " - " + stringJustName);
+			String newFileName = stringNumber + " - " + stringJustName;
 
-			if (!oldFile.getAbsolutePath().equals(newFile.getAbsolutePath())) {
-				if (oldFile.renameTo(newFile)) {
-					AllAlert.showInfoAlertSuccess();
-//					System.out.println("Файл переименован успешно");
+			// Преименовываем файл
+			if (!fileName.equals(newFileName)) {
+				try {
+					// rename a file in the same directory
+					Files.move(source, source.resolveSibling(newFileName));
+//					AllAlert.showInfoAlertSuccess();
+					numberOfSuccess++;
+				} catch (IOException e) {
+					e.printStackTrace();
+//					AllAlert.showWarningAlert();
+					numberOfWarning++;
 				}
 			} else {
-				AllAlert.showInfoAlertNone();
-//				System.out.println("Файл не нуждается в переименовывании 2");
+//				AllAlert.showInfoAlertNone();
+				numberOfNone++;
 			}
 
 		} else {
-			AllAlert.showInfoAlertNone();
-//			System.out.println("Файл не нуждается в переименовывании 1");
+//			AllAlert.showInfoAlertNone();
+			numberOfWarning++;
 		}
 	}
 }

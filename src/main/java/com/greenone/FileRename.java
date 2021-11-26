@@ -32,7 +32,6 @@ public class FileRename {
 				accDTO.setNumberOfWarning(accDTO.getNumberOfWarning() + 1);
 			}
 		}
-
 	}
 
 	private static void renameFile(File file, AccDTO accDTO) {
@@ -41,8 +40,12 @@ public class FileRename {
 
 		String[] stringFullName = fileName.split("(?=\\D)", 2);// divide into two parts, by not a number
 		String stringNumber = stringFullName[0].replaceAll("\\D", "");//only numbers remain
-		String[] stringNameSplit = stringFullName[1].split("\\b", 2);// divide by the beginning of the names
+
+		String[] stringNameSplit = stringFullName[1].replaceAll("[_]"," ")
+				.split("(\\b)", 2);// divide by the beginning of the names
+		System.out.println(stringFullName[1]);
 		String stringJustName = stringNameSplit[1];
+		System.out.println(stringNameSplit[1]);
 
 		//if the first part consists of numbers, then edit the name
 		if (stringNumber.matches("[0-9]+")) {

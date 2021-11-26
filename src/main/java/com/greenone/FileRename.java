@@ -17,61 +17,58 @@ public class FileRename {
 
 	private static void takeAllInRecursion(List<File> list, AccDTO accDTO) {
 		for (File file : list) {
-			if (file.isDirectory()) {
-				System.out.println("folder");
-				//работаем с папкой
-				takeAllInRecursion(Arrays.asList(file.listFiles()), accDTO);
+			if (file.exists()) {
+				if (file.isFile()) {
+					renameFile(file, accDTO);//working with the file
+				} else {
+					try {
+						takeAllInRecursion(Arrays.asList(file.listFiles()), accDTO);//working with the folder
+					} catch (NullPointerException e) {
+						e.printStackTrace();
+						accDTO.setNumberOfWarnFolder(accDTO.getNumberOfWarnFolder() + 1);
+					}
+				}
 			} else {
-				System.out.println("file");
-				//работаем с файлами
-				renameFile(file, accDTO);
+				accDTO.setNumberOfWarning(accDTO.getNumberOfWarning() + 1);
 			}
 		}
+
 	}
 
 	private static void renameFile(File file, AccDTO accDTO) {
 		String fileName = file.getName();
 		Path source = Paths.get(file.getAbsolutePath());
 
-		// Делим на две части, по не цифре (но по факту проверенная не цифра не "съедается")
-		String[] stringFullName = fileName.split("(?=\\D)", 2);
-		String stringNumber = stringFullName[0];
-		String stringName = stringFullName[1];
+		String[] stringFullName = fileName.split("(?=\\D)", 2);// divide into two parts, by not a number
+		String stringNumber = stringFullName[0].replaceAll("\\D", "");//only numbers remain
+		String[] stringNameSplit = stringFullName[1].split("\\b", 2);// divide by the beginning of the names
+		String stringJustName = stringNameSplit[1];
 
-		stringNumber = stringFullName[0].replaceAll("\\D", "");//Убираем все что не цифра
-
-		//Если первая часть состоит из цифр, то редактируем название
+		//if the first part consists of numbers, then edit the name
 		if (stringNumber.matches("[0-9]+")) {
-			// Если одна цифра, то меняем на двузначное число начиная с ноля ( 01 )
+			//if we have one digit, then we change it to a two-digit number starting from zero (01)
 			if (stringNumber.length() <= 1) {
 				stringNumber = "0" + stringNumber;
 			}
-			// Делим по началу Названия
-			String[] stringNameSplit = stringName.split("\\b", 2);
-			String stringJustName = stringNameSplit[1];
 
-			String newFileName = stringNumber + " - " + stringJustName;
+			String newFileName = stringNumber + " - " + stringJustName;//form a new file name
 
-			// Преименовываем файл
+			//rename a file
 			if (!fileName.equals(newFileName)) {
 				try {
-					// rename a file in the same directory
-					Files.move(source, source.resolveSibling(newFileName));
-//					numberOfSuccess++;
+					Files.move(source, source.resolveSibling(newFileName));//rename a file in the same directory
 					accDTO.setNumberOfSuccess(accDTO.getNumberOfSuccess() + 1);
 				} catch (IOException e) {
 					e.printStackTrace();
-//					numberOfWarning++;
+					System.out.println("Files not move");
 					accDTO.setNumberOfWarning(accDTO.getNumberOfWarning() + 1);
 				}
 			} else {
-//				numberOfNone++;
 				accDTO.setNumberOfNone(accDTO.getNumberOfNone() + 1);
 			}
 
 		} else {
-//			numberOfWarning++;
-			accDTO.setNumberOfWarning(accDTO.getNumberOfWarning() + 1);
+			accDTO.setNumberOfNone(accDTO.getNumberOfNone() + 1);
 		}
 	}
 }

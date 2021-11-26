@@ -27,7 +27,7 @@ public class JFXFileChooserAndDaD1 extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("FileChooserAndDaD");
+		primaryStage.setTitle("Rename the OddFrog");
 		primaryStage.setWidth(300);
 		primaryStage.setHeight(200);
 		primaryStage.setResizable(false);

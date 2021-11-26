@@ -8,9 +8,27 @@ public class AllAlert {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setTitle(null);
 		alert.setHeaderText(null);
-		alert.setContentText("Файл переименован успешно :" + accDTO.getNumberOfSuccess() + "\n" +
-							"Файл не нуждается в переименовывании : " + accDTO.getNumberOfNone() + "\n" +
-							"File not exist :" + accDTO.getNumberOfWarning());
+
+		String message = "";
+
+		if (accDTO.getNumberOfSuccess() > 0) {
+			message += "Files renamed successfully : " + accDTO.getNumberOfSuccess() + "\n";
+		}
+		if (accDTO.getNumberOfNone() > 0) {
+			message += "Files that do not need to be renamed : " + accDTO.getNumberOfNone() + "\n";
+		}
+		if (accDTO.getNumberOfWarning() > 0) {
+			message += "File does not exist : " + accDTO.getNumberOfWarning() + "\n";
+		}
+		if (accDTO.getNumberOfWarnFolder() > 0) {
+			message += "Folder does not exist : " + accDTO.getNumberOfWarnFolder();
+		}
+		if (message.length() == 0) {
+			message += "No files were found ";
+		}
+
+		alert.setContentText(message);
 		alert.showAndWait();
 	}
 }
+

@@ -4,6 +4,7 @@ public class AccDTO {
 	private int numberOfSuccess;
 	private int numberOfNone;
 	private int numberOfWarning;
+	private int numberOfWarnFolder;
 
 	public AccDTO() {
 	}
@@ -30,5 +31,13 @@ public class AccDTO {
 
 	public void setNumberOfWarning(int numberOfWarning) {
 		this.numberOfWarning = numberOfWarning;
+	}
+
+	public int getNumberOfWarnFolder() {
+		return numberOfWarnFolder;
+	}
+
+	public void setNumberOfWarnFolder(int numberOfWarnFolder) {
+		this.numberOfWarnFolder = numberOfWarnFolder;
 	}
 }

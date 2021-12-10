@@ -7,4 +7,4 @@
 Это приложением пользуюсь как минимум я сам.
 
 This is a small application on the javaFX platform, for ordering the file numbering. 
-Files can be selected through the explorer or simply drag & drop.
+Files can be selected through the explorer or simply drag & drop. 
